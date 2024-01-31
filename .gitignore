@@ -33,3 +33,4 @@ jdk8u402-b06/
 
 ### Executables ###
 *.jar
+*.class
