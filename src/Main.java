@@ -1,5 +1,5 @@
-import petrinet.ConcurrencyMonitor;
 import petrinet.PetriNet;
+import utils.TransitionUtils;
 import parser.Parser;
 
 import org.xml.sax.SAXException;
@@ -11,10 +11,15 @@ public class Main {
   public static void main(String[] args) {
     try {
       PetriNet petriNet = Parser.parseXmlFile("Test.pflow");
-      petriNet.printPetriNetAscii();
-      ConcurrencyMonitor monitor = new ConcurrencyMonitor(petriNet);
-      monitor.executeTransition(monitor.getEnabledTransitions().get(0));
-      System.out.println("");
+
+      for(int i = 0; i < args.length; i += 2) {
+        String id = args[i];
+        int firingRate = Integer.parseInt(args[i+1]);
+        petriNet.getTransitionById(id).ifPresent(TransitionUtils.combine(
+          t -> t.setFiringRate(firingRate), 
+          t -> t.setIsTimed(true)));
+    }
+
       petriNet.printPetriNetAscii();
     } catch (ParserConfigurationException | SAXException | IOException e) {
       e.printStackTrace();

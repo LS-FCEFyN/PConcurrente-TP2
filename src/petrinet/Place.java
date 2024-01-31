@@ -4,8 +4,8 @@ package petrinet;
  * Represents a Place in a Petri Net.
  *
  * <p>
- * A Place in a Petri Net is a location where tokens can reside.
- * Each Place has an ID and a certain number of tokens.
+ * A Place in a Petri Net is a location where tokens can reside. Each Place has
+ * an ID and a certain number of tokens.
  * </p>
  *
  * @author Loretta
@@ -18,7 +18,7 @@ public class Place {
     /**
      * Constructs a Place with the specified ID and number of tokens.
      *
-     * @param id     The ID of the Place.
+     * @param id The ID of the Place.
      * @param tokens The number of tokens in the Place.
      */
     public Place(String id, int tokens) {
@@ -44,21 +44,21 @@ public class Place {
         return tokens;
     }
 
-        /**
+    /**
      * Removes an x number of tokens form the Place.
      */
     public void removeTokens(int tokensToRemove) {
-        if (this.tokens - tokensToRemove >= 0) {
-            this.tokens -= tokensToRemove;
+        if (tokens - tokensToRemove >= 0) {
+            tokens -= tokensToRemove;
         }
     }
 
-    
+
     /**
      * Adds an x number of tokens to the Place.
      */
     public void addTokens(int tokensToAdd) {
-        this.tokens += tokensToAdd;
+        tokens += tokensToAdd;
     }
-    
+
 }

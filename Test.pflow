@@ -19,7 +19,7 @@
                 <graphics>
                     <offset x="0.0" y="0.0"/>
                 </graphics>
-                <value>Default,1</value>
+                <value>Default,2</value>
             </initialMarking>
         </place>
         <place id="P1">
@@ -44,7 +44,7 @@
         </place>
         <transition id="T0">
             <graphics>
-                <position x="179.0" y="61.0"/>
+                <position x="185.0" y="61.0"/>
             </graphics>
             <name>
                 <value>T0</value>
@@ -65,11 +65,45 @@
                 <value>0</value>
             </orientation>
             <rate>
+                <value>1000</value>
+            </rate>
+        </transition>
+        <transition id="T1">
+            <graphics>
+                <position x="183.0" y="99.0"/>
+            </graphics>
+            <name>
+                <value>T1</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <infiniteServer>
+                <value>false</value>
+            </infiniteServer>
+            <timed>
+                <value>false</value>
+            </timed>
+            <priority>
+                <value>1</value>
+            </priority>
+            <orientation>
+                <value>0</value>
+            </orientation>
+            <rate>
                 <value>1</value>
             </rate>
         </transition>
+        <arc id="T1 TO P1" source="T1" target="P1">
+            <arcpath id="" x="193.0" y="114.0" curvePoint="false"/>
+            <arcpath id="" x="274.0" y="91.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
         <arc id="T0 TO P1" source="T0" target="P1">
-            <arcpath id="" x="189.0" y="76.0" curvePoint="false"/>
+            <arcpath id="" x="195.0" y="76.0" curvePoint="false"/>
             <arcpath id="" x="273.0" y="85.0" curvePoint="false"/>
             <type value="normal"/>
             <inscription>
@@ -78,7 +112,15 @@
         </arc>
         <arc id="P0 TO T0" source="P0" target="T0">
             <arcpath id="" x="117.0" y="77.0" curvePoint="false"/>
-            <arcpath id="" x="179.0" y="76.0" curvePoint="false"/>
+            <arcpath id="" x="185.0" y="76.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="P0 TO T1" source="P0" target="T1">
+            <arcpath id="" x="116.0" y="84.0" curvePoint="false"/>
+            <arcpath id="" x="183.0" y="114.0" curvePoint="false"/>
             <type value="normal"/>
             <inscription>
                 <value>Default,1</value>

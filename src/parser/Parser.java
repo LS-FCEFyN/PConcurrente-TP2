@@ -42,21 +42,20 @@ public class Parser {
                 String id = element.getAttribute("id");
 
                 // Get the 'initialMarking' element
-                Node initialMarking = element.getElementsByTagName("initialMarking").item(0);
+                Node initialMarking = element.getElementsByTagName(
+                    "initialMarking").item(0);
                 if (initialMarking.getNodeType() == Node.ELEMENT_NODE) {
                     Element initialMarkingElement = (Element) initialMarking;
 
                     // Now get the 'value' element from 'initialMarking'
-                    String value = initialMarkingElement.getElementsByTagName("value").item(0).getTextContent();
+                    String value = initialMarkingElement.getElementsByTagName(
+                        "value").item(0).getTextContent();
                     String[] values = value.split(",");
                     int tokens;
                     if (values.length > 1) {
                         tokens = Integer.parseInt(values[1]);
                     } else {
-                        // handle the case where the value string does not contain a comma
-                        tokens = 0; // set a default value
-                        // or throw an exception:
-                        // throw new IllegalArgumentException("Invalid value format: " + value);
+                        tokens = 0;
                     }
                     places.add(new Place(id, tokens));
                 }
@@ -83,7 +82,8 @@ public class Parser {
                 String id = element.getAttribute("id");
                 String sourceId = element.getAttribute("source");
                 String destinationId = element.getAttribute("target");
-                String value = element.getElementsByTagName("value").item(0).getTextContent();
+                String value = element.getElementsByTagName(
+                    "value").item(0).getTextContent();
                 String[] values = value.split(",");
                 int weight = Integer.parseInt(values[1]);
 

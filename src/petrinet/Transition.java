@@ -5,8 +5,7 @@ package petrinet;
  *
  * <p>
  * A Transition in a Petri Net is an event that occurs, moving tokens from input
- * Places to output Places.
- * Each Transition has an ID and may have a delay.
+ * Places to output Places. Each Transition has an ID and may have a delay.
  * </p>
  *
  * @author Loretta
@@ -14,6 +13,8 @@ package petrinet;
  */
 public class Transition {
     private String id;
+    private int firingRate;
+    private boolean isTimed;
 
     /**
      * Constructs a Transition with the specified ID and no delay.
@@ -22,6 +23,8 @@ public class Transition {
      */
     public Transition(String id) {
         this.id = id;
+        this.firingRate = 0;
+        this.isTimed = false;
     }
 
     /**
@@ -31,5 +34,21 @@ public class Transition {
      */
     public String getId() {
         return id;
+    }
+
+    public void setFiringRate(int firingRate) {
+        this.firingRate = firingRate;
+    }
+
+    public int getFiringRate() {
+        return firingRate;
+    }
+
+    public void setIsTimed(boolean isTimed) {
+        this.isTimed = isTimed;
+    }
+
+    public boolean isTimed() {
+        return isTimed;
     }
 }
