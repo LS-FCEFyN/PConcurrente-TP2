@@ -52,6 +52,7 @@ public class PetriNet {
      * </p>
      */
     public void printPetriNetAscii() {
+        System.out.println("----------");
         System.out.println("Petri Net:");
         System.out.println("----------");
 

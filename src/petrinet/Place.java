@@ -1,5 +1,7 @@
 package petrinet;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Represents a Place in a Petri Net.
  *
@@ -13,7 +15,7 @@ package petrinet;
  */
 public class Place {
     private String id;
-    private int tokens;
+    private AtomicInteger tokens;
 
     /**
      * Constructs a Place with the specified ID and number of tokens.
@@ -23,7 +25,7 @@ public class Place {
      */
     public Place(String id, int tokens) {
         this.id = id;
-        this.tokens = tokens;
+        this.tokens = new AtomicInteger(tokens);
     }
 
     /**
@@ -41,15 +43,15 @@ public class Place {
      * @return int The number of tokens in the Place.
      */
     public int getTokens() {
-        return tokens;
+        return tokens.get();
     }
 
     /**
      * Removes an x number of tokens form the Place.
      */
     public void removeTokens(int tokensToRemove) {
-        if (tokens - tokensToRemove >= 0) {
-            tokens -= tokensToRemove;
+        if (tokens.get() - tokensToRemove >= 0) {
+            tokens.addAndGet(-tokensToRemove);
         }
     }
 
@@ -58,7 +60,7 @@ public class Place {
      * Adds an x number of tokens to the Place.
      */
     public void addTokens(int tokensToAdd) {
-        tokens += tokensToAdd;
+        tokens.addAndGet(tokensToAdd);
     }
 
 }

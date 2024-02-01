@@ -1,7 +1,7 @@
 package petrinet;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class represents a Concurrency Monitor for a Petri Net.
@@ -36,13 +36,9 @@ public class ConcurrencyMonitor {
      * @return A list of all enabled transitions.
      */
     public List<Transition> getEnabledTransitions() {
-        List<Transition> enabledTransitions = new ArrayList<>();
-        for (Transition transition : petriNet.getTransitions()) {
-            if (areInputPlacesReady(transition)) {
-                enabledTransitions.add(transition);
-            }
-        }
-        return enabledTransitions;
+        return petriNet.getTransitions().stream()
+        .filter(this::areInputPlacesReady)
+        .collect(Collectors.toList());
     }
 
     /**
@@ -53,16 +49,9 @@ public class ConcurrencyMonitor {
      * @return True if all input places are ready, false otherwise.
      */
     private boolean areInputPlacesReady(Transition transition) {
-        List<Arc> arcs = petriNet.getAllInputArcs();
-        for (Arc arc : arcs) {
-            if (arc.getTransition().equals(transition)) {
-                Place place = arc.getPlace();
-                if (place.getTokens() >= arc.getWeight()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return petriNet.getAllInputArcs().stream()
+        .anyMatch(arc -> arc.getTransition()
+        .equals(transition) && arc.getPlace().getTokens() >= arc.getWeight());
     }
 
     /**
@@ -71,25 +60,26 @@ public class ConcurrencyMonitor {
      * places.
      *
      * @param transition The transition to execute.
+     * @throws InterruptedException 
      */
-    public void executeTransition(Transition transition) {
-        List<Arc> arcs = petriNet.getAllInputArcs();
+    public synchronized void executeTransition(Transition transition) 
+    throws IllegalArgumentException, InterruptedException {
+        synchronized (transition) {
+            List<Arc> arcs = petriNet.getAllInputArcs();
 
-        for (Arc arc : arcs) {
-            if (arc.getTransition().equals(transition)) {
-                Place place = arc.getPlace();
-                place.removeTokens(arc.getWeight());
-            }
+            arcs.stream().filter(arc -> arc.getTransition().equals(transition))
+            .forEach(arc -> arc.getPlace().removeTokens(arc.getWeight()));
+        
+
+        if (transition.isTimed()) {
+            Thread.sleep(transition.getFiringRate());
         }
 
         arcs = petriNet.getAllOutputArcs();
 
-        for (Arc arc : arcs) {
-            if (arc.getTransition().equals(transition)) {
-                Place place = arc.getPlace();
-                place.addTokens(arc.getWeight());
-            }
-        }
+        arcs.stream().filter(arc -> arc.getTransition().equals(transition))
+        .forEach(arc -> arc.getPlace().addTokens(arc.getWeight()));
     }
+}
 
 }
