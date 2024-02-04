@@ -2,9 +2,29 @@
 <pnml>
     <net>
         <token id="Default" red="0" green="0" blue="0"/>
+        <place id="P0">
+            <graphics>
+                <position x="196.0" y="183.0"/>
+            </graphics>
+            <name>
+                <value>P0</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <capacity>
+                <value>0</value>
+            </capacity>
+            <initialMarking>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+                <value></value>
+            </initialMarking>
+        </place>
         <place id="P1">
             <graphics>
-                <position x="5.0" y="194.0"/>
+                <position x="35.0" y="172.0"/>
             </graphics>
             <name>
                 <value>P0</value>
@@ -160,6 +180,14 @@
                 <value>1</value>
             </rate>
         </transition>
+        <arc id="T1 TO P0" source="T1" target="P0">
+            <arcpath id="" x="211.0" y="105.0" curvePoint="false"/>
+            <arcpath id="" x="211.0" y="183.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
         <arc id="T1 TO P3" source="T2" target="P3">
             <arcpath id="" x="385.0" y="135.0" curvePoint="false"/>
             <arcpath id="" x="474.0" y="136.0" curvePoint="false"/>
@@ -208,8 +236,16 @@
                 <value>Default,1</value>
             </inscription>
         </arc>
+        <arc id="P0 TO T2" source="P0" target="T2">
+            <arcpath id="" x="225.0" y="193.0" curvePoint="false"/>
+            <arcpath id="" x="375.0" y="135.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
         <arc id="P1 TO T0" source="P1" target="T1">
-            <arcpath id="" x="24.0" y="194.0" curvePoint="false"/>
+            <arcpath id="" x="50.0" y="172.0" curvePoint="false"/>
             <arcpath id="" x="50.0" y="90.0" curvePoint="false"/>
             <arcpath id="" x="206.0" y="90.0" curvePoint="false"/>
             <type value="normal"/>

@@ -21,7 +21,7 @@ public class Main {
           String id = args[i];
 
           if (i + 1 >= args.length || !args[i + 1].matches("\\d+")) {
-            System.out.println("Invalid argument format. "
+            System.err.println("Invalid argument format. "
                 + "Usage: PETRI_NET.pflow TRANSITION_ID FIRING_RATE_IN_MS");
             System.exit(0);
           }
@@ -39,7 +39,7 @@ public class Main {
         }
 
       } else {
-        System.out.println(
+        System.err.println(
             "Usage: PETRI_NET.pflow or " + "PETRI_NET.pflow TRANSITION_ID FIRING_RATE_IN_MS");
         System.exit(0);
       }
@@ -50,9 +50,6 @@ public class Main {
     System.out.println("");
 
     ConcurrencyMonitor monitor = new ConcurrencyMonitor(petriNet);
-
-    System.out.println(monitor.getEnabledTransitions().size());
-    System.out.println(monitor.getEnabledTransitions().get(0).getId());
 
   }
 }

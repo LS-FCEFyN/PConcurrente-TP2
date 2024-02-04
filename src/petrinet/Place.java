@@ -63,4 +63,9 @@ public class Place {
         tokens.addAndGet(tokensToAdd);
     }
 
+    @Override
+    public String toString() {
+        return "ID: " + getId() + ", Tokens: " + getTokens();
+    }
+
 }

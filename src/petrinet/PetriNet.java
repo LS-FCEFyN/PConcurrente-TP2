@@ -1,16 +1,18 @@
 package petrinet;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * Represents a Petri Net.
  *
  * <p>
- * A Petri Net is a mathematical modeling language for the description of
- * distributed systems. It is characterized by Places, Transitions, and Arcs.
- * This class provides methods to interact with and manipulate the Petri Net.
+ * A Petri Net is a mathematical modeling language for the description of distributed systems. It is
+ * characterized by Places, Transitions, and Arcs. This class provides methods to interact with and
+ * manipulate the Petri Net.
  * </p>
  *
  * @author Loretta
@@ -33,22 +35,28 @@ public class PetriNet {
         this.places = places;
         this.transitions = transitions;
         this.arcs = arcs;
+
+        for (Transition transition : transitions) {
+            Map<Arc, Boolean> transitionArcs =
+                    arcs.stream().filter(arc -> arc.getTransition().equals(transition))
+                            .collect(Collectors.toMap(Function.identity(), Arc::isInput));
+            transition.setArcs(transitionArcs);
+        }
     }
 
     /**
      * Prints a textual representation of the Petri Net to the standard output.
      *
      * <p>
-     * This method is primarily used for verifying that the parser correctly
-     * parsed the Petri Net from a .pflow file. It prints out the details of the
-     * Places, Transitions, and Arcs in the Petri Net, which can be compared
-     * with the data in the .pflow file to check the accuracy of the parsing.
+     * This method is primarily used for verifying that the parser correctly parsed the Petri Net
+     * from a .pflow file. It prints out the details of the Places, Transitions, and Arcs in the
+     * Petri Net, which can be compared with the data in the .pflow file to check the accuracy of
+     * the parsing.
      * </p>
      *
      * <p>
-     * The output includes the IDs and token counts for each Place, the ID for
-     * each Transition, and the ID, associated Place and Transition, input
-     * status, and weight for each Arc.
+     * The output includes the IDs and token counts for each Place, the ID for each Transition, and
+     * the ID, associated Place and Transition, input status, and weight for each Arc.
      * </p>
      */
     public void printPetriNetAscii() {
@@ -57,23 +65,13 @@ public class PetriNet {
         System.out.println("----------");
 
         System.out.println("\nPlaces:");
-        places.stream().forEach(place -> System.out.printf("ID: %s,"
-         + "Tokens: %d\n", place.getId(), place.getTokens()));
+        places.stream().forEach(place -> System.out.printf(place.toString()));
 
         System.out.println("\nTransitions:");
-        transitions.stream()
-                .forEach(transition -> 
-                System.out.printf("ID: %s, Is Timed: %s, Firing Rate: %d\n",
-                transition.getId(), transition.isTimed(),
-                transition.getFiringRate()));
+        transitions.stream().forEach(transition -> System.out.printf(transition.toString()));
 
         System.out.println("\nArcs:");
-        arcs.stream()
-                .forEach(arc -> System.out.printf(
-                        "ID: %s, Place: %s, Transition: %s, Is Input: %s, " 
-                        + "Weight: %d\n", arc.getId(), 
-                        arc.getPlace().getId(), arc.getTransition().getId(),
-                        arc.isInput(), arc.getWeight()));
+        arcs.stream().forEach(arc -> System.out.printf(arc.toString()));
     }
 
     /**
@@ -109,8 +107,7 @@ public class PetriNet {
      * @return List<Arc> All output Arcs.
      */
     public List<Arc> getAllOutputArcs() {
-        return arcs.stream().filter(arc -> 
-        !arc.isInput()).collect(Collectors.toList());
+        return arcs.stream().filter(arc -> !arc.isInput()).collect(Collectors.toList());
     }
 
     /**
@@ -119,14 +116,13 @@ public class PetriNet {
      * @return Optional<Transition> May be a Transition or it may be nothing.
      */
     public Optional<Transition> getTransitionById(String id) {
-        return transitions.stream().filter(transition -> 
-        transition.getId().equals(id)).findFirst();
+        return transitions.stream().filter(transition -> transition.getId().equals(id)).findFirst();
     }
 
     public double[][] generateIncidenceMatrix() {
-        
+
         double[][] incidenceMatrix = new double[transitions.size()][places.size()];
-        
+
         getAllInputArcs().forEach(arc -> {
             int transitionIndex = transitions.indexOf(arc.getTransition());
             int placeIndex = places.indexOf(arc.getPlace());
@@ -138,7 +134,7 @@ public class PetriNet {
             int placeIndex = places.indexOf(arc.getPlace());
             incidenceMatrix[transitionIndex][placeIndex] += arc.getWeight();
         });
-        
+
         return incidenceMatrix;
     }
 

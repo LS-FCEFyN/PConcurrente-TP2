@@ -1,18 +1,15 @@
 package petrinet;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * This class represents a Concurrency Monitor for a Petri Net.
- * It provides methods to check if transitions are enabled and to execute
- * transitions.
- * 
+ * This class represents a Concurrency Monitor for a Petri Net. It provides
+ * methods to check if transitions are enabled and to execute transitions.
+ *
  * @author Loretta
  * @since 2023-06-28
  */
-
+ @SuppressWarnings("unused")
 public class ConcurrencyMonitor implements Runnable {
 
     /**
@@ -30,67 +27,75 @@ public class ConcurrencyMonitor implements Runnable {
     }
 
     /**
-     * Returns a list of all transitions that are currently enabled in the Petri
-     * Net.
-     * A transition is considered enabled if all input places have enough tokens.
-     *
-     * @return A list of all enabled transitions.
+     * This method is deprecated due to the introduction of atomicity in checking for a transition's
+     * enabledness and firing it in the {@link #executeTransition(Transition)} method.
+     * 
+     * As per the principles of Petri nets, these two operations should be performed together
+     * without the possibility of another thread or process intervening in between.
+     * 
+     * Previously, this method returned a list of all transitions that are currently enabled in the
+     * Petri Net. A transition is considered enabled if all input places have enough tokens.
+     * 
+     * @deprecated since 2024-02-04
+     * @see ConcurrencyMonitor#executeTransition(Transition)
      */
-    public List<Transition> getEnabledTransitions() {
-        return petriNet.getTransitions().stream()
-        .filter(this::areInputPlacesReady)
-        .collect(Collectors.toList());
+    @Deprecated
+    private List<Transition> getEnabledTransitions() {
+        throw new UnsupportedOperationException("This method is deprecated");
     }
 
     /**
-     * Checks if all input places for a given transition are ready.
-     * A place is considered ready if it has enough tokens.
-     *
-     * @param transition The transition to check.
-     * @return True if all input places are ready, false otherwise.
+     * This method is deprecated due to the introduction of atomicity in checking for a transition's
+     * enabledness and firing it in the {@link #executeTransition(Transition)} method.
+     * 
+     * Therefore, the logic from this method has been moved to the
+     * {@link #executeTransition(Transition)} method to ensure atomicity.
+     * 
+     * This method was used internally by the {@link #getEnabledTransitions()} method
+     * 
+     * @deprecated since 2024-02-04
+     * @see ConcurrencyMonitor#executeTransition(Transition)
      */
+    @Deprecated
     private boolean areInputPlacesReady(Transition transition) {
-        return petriNet.getAllInputArcs().stream()
-        .filter(arc -> arc.getTransition().equals(transition)).allMatch(
-         arc -> arc.getPlace().getTokens() >= arc.getWeight());
+        throw new UnsupportedOperationException("This method is deprecated");
     }
 
     /**
-     * Executes a given transition in the Petri Net.
-     * This involves removing tokens from input places and adding tokens to output
-     * places.
+     * Executes a given transition in the Petri Net. This involves removing tokens from input places
+     * and adding tokens to output places.
      *
      * @param transition The transition to execute.
-     * @throws InterruptedException 
+     * @throws InterruptedException
      */
-    public synchronized void executeTransition(Transition transition) {
+    public void executeTransition(Transition transition) {
         try {
             synchronized (transition) {
-                List<Arc> arcs = petriNet.getAllInputArcs();
-    
-                arcs.stream().filter(arc -> arc.getTransition().equals(transition))
+
+                boolean areInputPlacesReady = transition.getInputArcs().stream()
+                .allMatch(arc -> arc.getPlace().getTokens() >= arc.getWeight());
+
+                if(!areInputPlacesReady) {
+                    return;
+                }
+
+                transition.getInputArcs()
                 .forEach(arc -> arc.getPlace().removeTokens(arc.getWeight()));
-    
+
                 if (transition.isTimed()) {
                     Thread.sleep(transition.getFiringRate());
                 }
-    
-                arcs = petriNet.getAllOutputArcs();
-    
-                arcs.stream().filter(arc -> arc.getTransition().equals(transition))
+
+                transition.getOutputArcs()
                 .forEach(arc -> arc.getPlace().addTokens(arc.getWeight()));
             }
         } catch (IllegalArgumentException | InterruptedException e) {
-            // Log the exception or handle it in a way that makes sense for your application
             System.err.println("Error executing transition: " + e.getMessage());
         }
     }
-    
+
     @Override
     public void run() {
-        List<Transition> transitions = getEnabledTransitions();
-        Collections.shuffle(transitions);
-        transitions.stream().forEach(this::executeTransition);
     }
 
 }

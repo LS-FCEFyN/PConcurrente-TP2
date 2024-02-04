@@ -5,9 +5,8 @@ package petrinet;
  *
  * <p>
  * An Arc in a Petri Net is a directed edge that connects a Place to a
- * Transition or vice versa.
- * Each Arc has an ID, an associated Place, an associated Transition, an input
- * status, and a weight.
+ * Transition or vice versa. Each Arc has an ID, an associated Place, an
+ * associated Transition, an input status, and a weight.
  * </p>
  *
  * @author Loretta
@@ -22,14 +21,15 @@ public class Arc {
     private int weight;
 
     /**
-     * Constructs an Arc with the specified ID, Place, Transition, input status, and
-     * weight.
+     * Constructs an Arc with the specified ID, Place, Transition, input status, and weight.
      *
-     * @param id         The ID of the Arc.
-     * @param place      The Place associated with the Arc.
+     * @param id The ID of the Arc.
+     * @param place The Place associated with the Arc.
      * @param transition The Transition associated with the Arc.
-     * @param isOutput   Whether the Arc is an output Arc or not. i.e. is this arc flowing from a place to a transition (it's an output arc so it's value is true) or the arc is flowing from a transition to a place
-     * @param weight     The weight of the Arc.
+     * @param isOutput Whether the Arc is an output Arc or not. i.e. is this arc flowing from a
+     *        place to a transition (it's an output arc so it's value is true) or the arc is flowing
+     *        from a transition to a place
+     * @param weight The weight of the Arc.
      */
     public Arc(String id, Place place, Transition transition, boolean isInput, int weight) {
         this.id = id;
@@ -67,8 +67,8 @@ public class Arc {
     }
 
     /**
-     * Returns whether the Arc is an input Arc to a transition (i.e. an input arc)
-     * or an input arc to a place (i.e. an output arc).
+     * Returns whether the Arc is an input Arc to a transition (i.e. an input arc) or an input arc
+     * to a place (i.e. an output arc).
      *
      * @return boolean True if the Arc is an input Arc to a transition, false otherwise.
      */
@@ -83,5 +83,12 @@ public class Arc {
      */
     public int getWeight() {
         return weight;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + getId() + ", Place: " + getPlace().getId() + ", Transition: "
+                + this.getTransition().getId() + ", Is Input: " + isInput() + ", Weight: "
+                + getWeight();
     }
 }
