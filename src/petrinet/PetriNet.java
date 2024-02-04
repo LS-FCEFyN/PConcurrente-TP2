@@ -123,4 +123,23 @@ public class PetriNet {
         transition.getId().equals(id)).findFirst();
     }
 
+    public double[][] generateIncidenceMatrix() {
+        
+        double[][] incidenceMatrix = new double[transitions.size()][places.size()];
+        
+        getAllInputArcs().forEach(arc -> {
+            int transitionIndex = transitions.indexOf(arc.getTransition());
+            int placeIndex = places.indexOf(arc.getPlace());
+            incidenceMatrix[transitionIndex][placeIndex] = -arc.getWeight();
+        });
+
+        getAllOutputArcs().forEach(arc -> {
+            int transitionIndex = transitions.indexOf(arc.getTransition());
+            int placeIndex = places.indexOf(arc.getPlace());
+            incidenceMatrix[transitionIndex][placeIndex] += arc.getWeight();
+        });
+        
+        return incidenceMatrix;
+    }
+
 }

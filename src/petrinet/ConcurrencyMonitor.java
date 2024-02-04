@@ -1,5 +1,6 @@
 package petrinet;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  * @since 2023-06-28
  */
 
-public class ConcurrencyMonitor {
+public class ConcurrencyMonitor implements Runnable {
 
     /**
      * The Petri Net associated with this Concurrency Monitor.
@@ -50,8 +51,8 @@ public class ConcurrencyMonitor {
      */
     private boolean areInputPlacesReady(Transition transition) {
         return petriNet.getAllInputArcs().stream()
-        .anyMatch(arc -> arc.getTransition()
-        .equals(transition) && arc.getPlace().getTokens() >= arc.getWeight());
+        .filter(arc -> arc.getTransition().equals(transition)).allMatch(
+         arc -> arc.getPlace().getTokens() >= arc.getWeight());
     }
 
     /**
@@ -62,24 +63,34 @@ public class ConcurrencyMonitor {
      * @param transition The transition to execute.
      * @throws InterruptedException 
      */
-    public synchronized void executeTransition(Transition transition) 
-    throws IllegalArgumentException, InterruptedException {
-        synchronized (transition) {
-            List<Arc> arcs = petriNet.getAllInputArcs();
-
-            arcs.stream().filter(arc -> arc.getTransition().equals(transition))
-            .forEach(arc -> arc.getPlace().removeTokens(arc.getWeight()));
-        
-
-        if (transition.isTimed()) {
-            Thread.sleep(transition.getFiringRate());
+    public synchronized void executeTransition(Transition transition) {
+        try {
+            synchronized (transition) {
+                List<Arc> arcs = petriNet.getAllInputArcs();
+    
+                arcs.stream().filter(arc -> arc.getTransition().equals(transition))
+                .forEach(arc -> arc.getPlace().removeTokens(arc.getWeight()));
+    
+                if (transition.isTimed()) {
+                    Thread.sleep(transition.getFiringRate());
+                }
+    
+                arcs = petriNet.getAllOutputArcs();
+    
+                arcs.stream().filter(arc -> arc.getTransition().equals(transition))
+                .forEach(arc -> arc.getPlace().addTokens(arc.getWeight()));
+            }
+        } catch (IllegalArgumentException | InterruptedException e) {
+            // Log the exception or handle it in a way that makes sense for your application
+            System.err.println("Error executing transition: " + e.getMessage());
         }
-
-        arcs = petriNet.getAllOutputArcs();
-
-        arcs.stream().filter(arc -> arc.getTransition().equals(transition))
-        .forEach(arc -> arc.getPlace().addTokens(arc.getWeight()));
     }
-}
+    
+    @Override
+    public void run() {
+        List<Transition> transitions = getEnabledTransitions();
+        Collections.shuffle(transitions);
+        transitions.stream().forEach(this::executeTransition);
+    }
 
 }

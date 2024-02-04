@@ -21,6 +21,9 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Parser {
+
+    // TODO: Re-write this parser using StAX rather than the current DOM based parser
+
     public static PetriNet parseXmlFile(String filePath)
             throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -32,35 +35,32 @@ public class Parser {
 
         // Parse places
         List<Place> places = IntStream.range(0, doc.getElementsByTagName("place").getLength())
-        .mapToObj(i -> doc.getElementsByTagName("place").item(i))
-        .filter(node -> node.getNodeType() == Node.ELEMENT_NODE)
-        .map(node -> (Element) node)
-        .map(element -> {
-            String id = element.getAttribute("id");
-            String value = ((Element) element.getElementsByTagName("initialMarking").item(0))
-                    .getElementsByTagName("value").item(0).getTextContent();
-            String[] values = value.split(",");
-            int tokens = values.length > 1 ? Integer.parseInt(values[1]) : 0;
-            return new Place(id, tokens);
-        })
-        .collect(Collectors.toList());
-
-        // Parse transitions
-        List<Transition> transitions = IntStream.range(0, doc.getElementsByTagName("transition").getLength())
-                .mapToObj(i -> doc.getElementsByTagName("transition").item(i))
-                .filter(node -> node.getNodeType() == Node.ELEMENT_NODE)
-                .map(node -> (Element) node)
+                .mapToObj(i -> doc.getElementsByTagName("place").item(i))
+                .filter(node -> node.getNodeType() == Node.ELEMENT_NODE).map(node -> (Element) node)
                 .map(element -> {
                     String id = element.getAttribute("id");
-                    return new Transition(id);
-                })
-                .collect(Collectors.toList());
+                    String value =
+                            ((Element) element.getElementsByTagName("initialMarking").item(0))
+                                    .getElementsByTagName("value").item(0).getTextContent();
+                    String[] values = value.split(",");
+                    int tokens = values.length > 1 ? Integer.parseInt(values[1]) : 0;
+                    return new Place(id, tokens);
+                }).collect(Collectors.toList());
+
+        // Parse transitions
+        List<Transition> transitions =
+                IntStream.range(0, doc.getElementsByTagName("transition").getLength())
+                        .mapToObj(i -> doc.getElementsByTagName("transition").item(i))
+                        .filter(node -> node.getNodeType() == Node.ELEMENT_NODE)
+                        .map(node -> (Element) node).map(element -> {
+                            String id = element.getAttribute("id");
+                            return new Transition(id);
+                        }).collect(Collectors.toList());
 
         // Parse arcs
         List<Arc> arcs = IntStream.range(0, doc.getElementsByTagName("arc").getLength())
                 .mapToObj(i -> doc.getElementsByTagName("arc").item(i))
-                .filter(node -> node.getNodeType() == Node.ELEMENT_NODE)
-                .map(node -> (Element) node)
+                .filter(node -> node.getNodeType() == Node.ELEMENT_NODE).map(node -> (Element) node)
                 .flatMap(element -> {
                     String id = element.getAttribute("id");
                     String sourceId = element.getAttribute("source");
@@ -69,11 +69,11 @@ public class Parser {
                     String[] values = value.split(",");
                     int weight = Integer.parseInt(values[1]);
 
-                    Optional<Place> placeOpt = places.stream()
-                            .filter(p -> p.getId().equals(sourceId) || p.getId().equals(destinationId))
+                    Optional<Place> placeOpt = places.stream().filter(
+                            p -> p.getId().equals(sourceId) || p.getId().equals(destinationId))
                             .findAny();
-                    Optional<Transition> transitionOpt = transitions.stream()
-                            .filter(t -> t.getId().equals(sourceId) || t.getId().equals(destinationId))
+                    Optional<Transition> transitionOpt = transitions.stream().filter(
+                            t -> t.getId().equals(sourceId) || t.getId().equals(destinationId))
                             .findAny();
 
                     if (placeOpt.isPresent() && transitionOpt.isPresent()) {
@@ -84,8 +84,7 @@ public class Parser {
                     } else {
                         return Stream.empty();
                     }
-                })
-                .collect(Collectors.toList());
+                }).collect(Collectors.toList());
 
         return new PetriNet(places, transitions, arcs);
     }
