@@ -1,10 +1,12 @@
 package petrinet;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import utils.CustomComparator;
 
 /**
  * Represents a Petri Net.
@@ -35,6 +37,11 @@ public class PetriNet {
         this.places = places;
         this.transitions = transitions;
         this.arcs = arcs;
+
+        CustomComparator comparator = new CustomComparator();
+        
+        Collections.sort(this.places, comparator);
+        Collections.sort(this.transitions, comparator);
 
         for (Transition transition : transitions) {
             Map<Arc, Boolean> transitionArcs =

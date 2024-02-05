@@ -6,8 +6,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Represents a Place in a Petri Net.
  *
  * <p>
- * A Place in a Petri Net is a location where tokens can reside. Each Place has
- * an ID and a certain number of tokens.
+ * A Place in a Petri Net is a location where tokens can reside. Each Place has an ID and a certain
+ * number of tokens.
  * </p>
  *
  * @author Loretta
@@ -49,10 +49,12 @@ public class Place {
     /**
      * Removes an x number of tokens form the Place.
      */
-    public void removeTokens(int tokensToRemove) {
+    public boolean removeTokens(int tokensToRemove) {
         if (tokens.get() - tokensToRemove >= 0) {
             tokens.addAndGet(-tokensToRemove);
+            return true;
         }
+        return false;
     }
 
 
@@ -65,7 +67,7 @@ public class Place {
 
     @Override
     public String toString() {
-        return "ID: " + getId() + ", Tokens: " + getTokens();
+        return "ID: " + getId() + ", Tokens: " + getTokens() + "\n";
     }
 
 }

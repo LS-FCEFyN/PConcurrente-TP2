@@ -118,13 +118,5 @@
                 <value>Default,1</value>
             </inscription>
         </arc>
-        <arc id="P0 TO T1" source="P0" target="T1">
-            <arcpath id="" x="116.0" y="84.0" curvePoint="false"/>
-            <arcpath id="" x="183.0" y="114.0" curvePoint="false"/>
-            <type value="normal"/>
-            <inscription>
-                <value>Default,1</value>
-            </inscription>
-        </arc>
     </net>
 </pnml>

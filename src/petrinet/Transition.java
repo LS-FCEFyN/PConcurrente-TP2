@@ -108,6 +108,6 @@ public class Transition {
 
     @Override
     public String toString() {
-        return "ID: " + getId() + ", Is Timed: " + isTimed() + ", Firing Rate: " + getFiringRate();
+        return "ID: " + getId() + ", Is Timed: " + isTimed() + ", Firing Rate: " + getFiringRate() + "\n";
     }
 }

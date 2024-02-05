@@ -19,8 +19,8 @@ export CLASSPATH=$(BUILD)
 # Compile rule
 compile:
 	mkdir -p $(BUILD)
-	$(JAVA_HOME)/bin/javac -d $(BUILD) $(SRC_PETRINET)/*.java
 	$(JAVA_HOME)/bin/javac -d $(BUILD) $(SRC_UTILS)/*.java
+	$(JAVA_HOME)/bin/javac -d $(BUILD) $(SRC_PETRINET)/*.java
 	$(JAVA_HOME)/bin/javac -d $(BUILD) $(SRC_PARSER)/*.java
 	$(JAVA_HOME)/bin/javac -d $(BUILD) $(SRC)/*.java
 

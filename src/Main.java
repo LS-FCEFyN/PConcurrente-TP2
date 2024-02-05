@@ -7,6 +7,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Main {
   public static void main(String[] args) {
@@ -35,7 +36,7 @@ public class Main {
           petriNet.getTransitionById(id).ifPresent(
               TransitionUtils.combine(t -> t.setFiringRate(firingRate), t -> t.setIsTimed(true)));
 
-              petriNet.printPetriNetAscii();
+          petriNet.printPetriNetAscii();
         }
 
       } else {
@@ -47,9 +48,34 @@ public class Main {
       System.out.println(e.getClass().getName());
     }
 
+    double mat[][] = petriNet.generateIncidenceMatrix();
+    mat = utils.Math.rref(mat);
+
+    System.out.println(Arrays.deepToString(mat).replace("], ", "]\n"));
+
     System.out.println("");
 
-    ConcurrencyMonitor monitor = new ConcurrencyMonitor(petriNet);
+//    ConcurrencyMonitor monitor = new ConcurrencyMonitor(petriNet);
 
+//    Thread thread1 = new Thread(() -> monitor.run());
+//    Thread thread2 = new Thread(() -> monitor.run());
+//    Thread thread3 = new Thread(() -> monitor.run());
+//    Thread thread4 = new Thread(() -> monitor.run());
+
+//    thread1.start();
+//    thread2.start();
+//    thread3.start();
+//    thread4.start();
+    
+  //  try {
+//      thread1.join();
+//      thread2.join();
+//      thread3.join();
+//      thread4.join();
+//    } catch (InterruptedException e) {
+ //     e.printStackTrace();
+  //  }
+
+    petriNet.printPetriNetAscii();
   }
 }

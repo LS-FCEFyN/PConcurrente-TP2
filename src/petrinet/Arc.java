@@ -89,6 +89,6 @@ public class Arc {
     public String toString() {
         return "ID: " + getId() + ", Place: " + getPlace().getId() + ", Transition: "
                 + this.getTransition().getId() + ", Is Input: " + isInput() + ", Weight: "
-                + getWeight();
+                + getWeight() + "\n";
     }
 }

@@ -1,15 +1,17 @@
 package petrinet;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
- * This class represents a Concurrency Monitor for a Petri Net. It provides
- * methods to check if transitions are enabled and to execute transitions.
+ * This class represents a Concurrency Monitor for a Petri Net. It provides methods to check if
+ * transitions are enabled and to execute transitions.
  *
  * @author Loretta
  * @since 2023-06-28
  */
- @SuppressWarnings("unused")
+@SuppressWarnings("unused")
 public class ConcurrencyMonitor implements Runnable {
 
     /**
@@ -63,39 +65,54 @@ public class ConcurrencyMonitor implements Runnable {
 
     /**
      * Executes a given transition in the Petri Net. This involves removing tokens from input places
-     * and adding tokens to output places.
+     * and adding tokens to output places and also checking the conditions for firing, since firing
+     * and checking the conditions are supposed to be a single atomic step
      *
      * @param transition The transition to execute.
      * @throws InterruptedException
      */
-    public void executeTransition(Transition transition) {
+    public boolean executeTransition(Transition transition) {
         try {
             synchronized (transition) {
 
                 boolean areInputPlacesReady = transition.getInputArcs().stream()
-                .allMatch(arc -> arc.getPlace().getTokens() >= arc.getWeight());
+                        .allMatch(arc -> arc.getPlace().getTokens() >= arc.getWeight());
 
-                if(!areInputPlacesReady) {
-                    return;
+                if (!areInputPlacesReady) {
+                    return false;
                 }
 
                 transition.getInputArcs()
-                .forEach(arc -> arc.getPlace().removeTokens(arc.getWeight()));
+                        .forEach(arc -> arc.getPlace().removeTokens(arc.getWeight()));
+
+                System.out.println(Thread.currentThread().getName() + "is firing transition: "
+                        + transition.getId());
 
                 if (transition.isTimed()) {
                     Thread.sleep(transition.getFiringRate());
                 }
 
                 transition.getOutputArcs()
-                .forEach(arc -> arc.getPlace().addTokens(arc.getWeight()));
+                        .forEach(arc -> arc.getPlace().addTokens(arc.getWeight()));
             }
         } catch (IllegalArgumentException | InterruptedException e) {
             System.err.println("Error executing transition: " + e.getMessage());
         }
+
+        return true;
     }
 
     @Override
     public void run() {
+        List<Transition> transitions = petriNet.getTransitions();
+        int i = 0;
+        while (i < 9) {
+            Collections.shuffle(transitions);
+            while (!executeTransition(transitions.get(0))) {
+                Collections.shuffle(transitions);
+            }
+            i++;
+        }
     }
 
 }
