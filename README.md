@@ -12,7 +12,7 @@ A Petri net is a graphical and mathematical modeling tool that generalizes state
 In concurrent programming, a monitor is a thread-safe class, object, or module that uses mutual exclusion to safely allow access to a method or variable by more than one thread. The defining characteristic of a monitor is that its methods are executed with mutual exclusion, meaning that at any given time, at most one thread may be executing any of its methods.
 
 For further information, see:
-- [Monitor in Wikipedia](https://en.wikipedia.org/wiki/Monitor_(synchronization).
+- [Monitor in Wikipedia](https://en.wikipedia.org/wiki/Monitor_(synchronization)).
 
 ## Key Features
 
