@@ -21,7 +21,7 @@ For further information, see:
   - Place/Transition net
   - Timed net
 - Automatic generation of:
-  - Incidence Matrix
+  - Incidence Matrix $$C$$
   - Solution vector for the equation $$C \times \omega = 0$$ (T-Invariants)
   - Solution vector for the equation $$\alpha \times C^{T} = 0$$ (P-Invariants)
 
