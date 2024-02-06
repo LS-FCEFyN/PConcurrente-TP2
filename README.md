@@ -22,8 +22,8 @@ For further information, see:
   - Timed net
 - Automatic generation of:
   - Incidence Matrix $$C$$
-  - Solution vector for the equation $$C^{T} \times \omega = 0$$ (T-Invariants)
-  - Solution vector for the equation $$C \times \alpha = 0$$ (P-Invariants)
+  - Solution vector for the equation $$C \times \omega = 0$$ (T-Invariants)
+  - Solution vector for the equation $$C^{T} \times \alpha = 0$$ (P-Invariants)
 
 ### Transition Policy
 
