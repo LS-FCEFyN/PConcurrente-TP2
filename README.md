@@ -21,9 +21,9 @@ For further information, see:
   - Place/Transition net
   - Timed net
 - Automatic generation of:
-  - Incidence Matrix $$C$$
-  - Solution vector for the equation $$C \times \omega = 0$$ (T-Invariants)
-  - Solution vector for the equation $$C^{T} \times \alpha = 0$$ (P-Invariants)
+  - Incidence Matrix $$C$$ (Transitions as rows, Places as columns convention)
+  - Solution vector for the equation $$C \times \omega = 0$$ (P-Invariants)
+  - Solution vector for the equation $$C^{T} \times \alpha = 0$$ (T-Invariants)
 
 ### Transition Policy
 
