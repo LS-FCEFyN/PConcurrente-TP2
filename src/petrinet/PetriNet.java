@@ -40,9 +40,7 @@ public class PetriNet {
 
         CustomComparator comparator = new CustomComparator();
         
-        Collections.sort(this.places, comparator);
         Collections.sort(this.transitions, comparator);
-        Collections.sort(this.arcs, comparator);
 
         for (Transition transition : transitions) {
             Map<Arc, Boolean> transitionArcs =

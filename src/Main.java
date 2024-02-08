@@ -1,13 +1,14 @@
-import petrinet.ConcurrencyMonitor;
 import petrinet.PetriNet;
 import utils.TransitionUtils;
 import parser.Parser;
 
 import org.xml.sax.SAXException;
-
+import monitor.PetriNetMonitor;
+import monitor.policies.BalancedPolicy;
+import monitor.policies.RandomPolicy;
+import monitor.policies.TransitionPolicy;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class Main {
   public static void main(String[] args) {
@@ -35,8 +36,6 @@ public class Main {
 
           petriNet.getTransitionById(id).ifPresent(
               TransitionUtils.combine(t -> t.setFiringRate(firingRate), t -> t.setIsTimed(true)));
-
-          petriNet.printPetriNetAscii();
         }
 
       } else {
@@ -48,34 +47,51 @@ public class Main {
       System.out.println(e.getClass().getName());
     }
 
-    double mat[][] = petriNet.generateIncidenceMatrix();
-    mat = utils.Math.rref(mat);
+    TransitionPolicy policy = new BalancedPolicy();
+    PetriNetMonitor monitor = new PetriNetMonitor(petriNet, policy);
 
-    System.out.println(Arrays.deepToString(mat).replace("], ", "]\n"));
-
-    System.out.println("");
-
-//    ConcurrencyMonitor monitor = new ConcurrencyMonitor(petriNet);
-
-//    Thread thread1 = new Thread(() -> monitor.run());
-//    Thread thread2 = new Thread(() -> monitor.run());
-//    Thread thread3 = new Thread(() -> monitor.run());
-//    Thread thread4 = new Thread(() -> monitor.run());
-
-//    thread1.start();
-//    thread2.start();
-//    thread3.start();
-//    thread4.start();
-    
-  //  try {
-//      thread1.join();
-//      thread2.join();
-//      thread3.join();
-//      thread4.join();
-//    } catch (InterruptedException e) {
- //     e.printStackTrace();
-  //  }
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
+    monitor.run();
 
     petriNet.printPetriNetAscii();
+
   }
 }

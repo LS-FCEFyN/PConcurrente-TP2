@@ -1,8 +1,10 @@
 # Variables
 SRC_PETRINET = ./src/petrinet
-SRC_PARSER = ./src/parser
-SRC_UTILS = ./src/utils
-SRC = ./src
+SRC_MONITOR  = ./src/monitor
+SRC_POLICIES = ./src/monitor/policies
+SRC_PARSER   = ./src/parser
+SRC_UTILS    = ./src/utils
+SRC          = ./src
 
 MANIFEST = ./src/META-INF/MANIFEST.MF
 
@@ -19,6 +21,8 @@ export CLASSPATH=$(BUILD)
 # Compile rule
 compile:
 	mkdir -p $(BUILD)
+	$(JAVA_HOME)/bin/javac -d $(BUILD) $(SRC_POLICIES)/*.java
+	$(JAVA_HOME)/bin/javac -d $(BUILD) $(SRC_MONITOR)/*.java
 	$(JAVA_HOME)/bin/javac -d $(BUILD) $(SRC_UTILS)/*.java
 	$(JAVA_HOME)/bin/javac -d $(BUILD) $(SRC_PETRINET)/*.java
 	$(JAVA_HOME)/bin/javac -d $(BUILD) $(SRC_PARSER)/*.java
